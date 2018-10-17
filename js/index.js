@@ -1,50 +1,56 @@
+/************** Evaluate pose ****************/
 
+// Evaluate nose to each ear distances to detect turning of face
+function evaluateFaceToEars(noseX, leftEarX, rightEarX){
+    NoseToLeftEar = Math.abs(noseX - leftEarX);
+    NoseToRightEar = Math.abs(noseX - rightEarX);
 
+    if (NoseToLeftEar > NoseToRightEar + 100) {
+        console.log('left turn');
+    } else if (NoseToRightEar > NoseToLeftEar + 100) {
+        console.log('right turn');
+    } else {
+        console.log('do not move');
+    }
+}
 
+/************** Web browser webcam pose capture ****************/
 
 async function start() {
-    const videoElement = document.getElementById('video');
-    videoElement.srcObject = await navigator.mediaDevices.getUserMedia({ video: true });
-    await videoElement.play();
-
-    // takeSnapshot(videoElement)
+    const videoElement = await setupVideo();
 
     const imageScaleFactor = 0.5;
     const outputStride = 16;
-    const flipHorizontal = false;
-    
-    const model = await posenet.load();
-    const pose = await model.estimateSinglePose(videoElement, imageScaleFactor, flipHorizontal, outputStride);
+    const flipHorizontal = true;
 
-    console.log(pose)
-    // console.log('nose', pose.keypoints[0].position)
+    const model = await posenet.load();
+
+    setInterval(async() => {
+        const pose = await model.estimateSinglePose(videoElement, imageScaleFactor, flipHorizontal, outputStride);
+
+        //console.log('nose', pose.keypoints[0].position)
+        // console.log('left eye', pose.keypoints[1].position)
+        // console.log('right eye', pose.keypoints[2].position)
+        // console.log('left ear', pose.keypoints[3].position)
+        // console.log('right ear', pose.keypoints[4].position)
+        // console.log('left shoulder', pose.keypoints[5].position)
+        // console.log('right shoulder', pose.keypoints[6].position)
+    }, 1000);
+    
+    // Call function to evaluate snapshot for face turns
+    // Tun if nose to left or right ear distances differ by more than 100 pixels
+    noseX = pose.keypoints[0].position.x;
+    leftEarX = pose.keypoints[3].position.x;
+    rightEarX = pose.keypoints[4].position.x;
+    evaluateFaceToEars(noseX, leftEarX, rightEarX);
 }
 
-
-// function takeSnapshot(video) {
-//     let context = canvas.getContext("2d"),
-//         width = video.videoWidth,
-//         height = video.videoHeight;
-//
-//     if (width && height) {
-//         // Setup a canvas with the same dimensions as the video.
-//         canvas.width = width;
-//         canvas.height = height;
-//
-//         // Make a copy of the current frame in the video on the canvas.
-//         context.drawImage(video, 0, 0, width, height);
-//
-//         classifyImage();
-//     }
-// }
-//
-//
-// async function startCamera() {
-//     video.srcObject = stream;
-//     await video.play();
-//
-//     setInterval(() => takeSnapshot(), 1000);
-// }
+async function setupVideo() {
+    const videoElement = document.getElementById('video');
+    videoElement.srcObject = await navigator.mediaDevices.getUserMedia({video: true});
+    await videoElement.play()
+    return videoElement;
+}
 
 
 /**************  MAP ****************/
