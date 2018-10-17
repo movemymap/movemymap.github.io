@@ -3,43 +3,40 @@
   <head>
       <meta charset="UTF-8">
       <title>Move My Map</title>
+      <style>
+          html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+          }
+          #pano {
+            float: left;
+            height: 100%;
+            width: 100%;
+          }
+        </style>
+
       <script src="https://unpkg.com/@tensorflow/tfjs"></script>
       <script src="https://unpkg.com/@tensorflow-models/posenet"></script>
-      <link rel="stylesheet" type="text/css" href="./css/main.css">
       <script src="./js/index.js"></script>
       <script src="./js/env.js"></script>
   </head>
-  <body>
-    <div id="get-location">
-      <h1>Move My Map</h1>
-      <h2>Where do you want to go?</h2>
-      <form id="location-form">
-        <input type="text" name="location" /> <br />
-        <input type="submit" value="Explore" />
-      </form>
-    </div>
-    <video id="video" width="600" height="600">Video stream not available.</video>
-    <div id="pano"></div>
-
+  <body onload="start()">
+  <video id="video" width="600" height="600">Video stream not available.</video>
+   
+  <div id="pano"></div>
+  
     <script>
-      (function() {
-          var apiKey = env.GOOGLE_API_KEY
-          var googleMap = document.createElement('script');
-          googleMap.type = 'text/javascript';
-          googleMap.async = true;
-          googleMap.defer = true;
-          googleMap.src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&callback=initPano';
-          console.log(googleMap.src);
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(googleMap, s);
-      })()
-    </script>
-
-    <script type="text/javascript" >
-      var onSubmit = function(event) {
-        event.preventDefault();
-        localStorage.setItem('exploreLocation', event.target.location.value);
-      }
-      document.getElementById('location-form').addEventListener('submit', onSubmit)
-    </script>
+        (function() {
+            var apiKey = env.GOOGLE_API_KEY
+            var googleMap = document.createElement('script');
+            googleMap.type = 'text/javascript';
+            googleMap.async = true;
+            googleMap.defer = true;
+            googleMap.src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&callback=initPano';
+            console.log(googleMap.src);
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(googleMap, s);
+        })()
+      </script>
   </body>
 </html>
