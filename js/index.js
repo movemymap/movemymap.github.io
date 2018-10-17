@@ -35,14 +35,14 @@ async function start() {
         // console.log('right ear', pose.keypoints[4].position)
         // console.log('left shoulder', pose.keypoints[5].position)
         // console.log('right shoulder', pose.keypoints[6].position)
+        
+        // Call function to evaluate snapshot for face turns
+        // Turn if nose to left or right ear distances differ by more than 100 pixels
+        noseX = pose.keypoints[0].position.x;
+        leftEarX = pose.keypoints[3].position.x;
+        rightEarX = pose.keypoints[4].position.x;
+        evaluateFaceToEars(noseX, leftEarX, rightEarX);
     }, 1000);
-    
-    // Call function to evaluate snapshot for face turns
-    // Tun if nose to left or right ear distances differ by more than 100 pixels
-    noseX = pose.keypoints[0].position.x;
-    leftEarX = pose.keypoints[3].position.x;
-    rightEarX = pose.keypoints[4].position.x;
-    evaluateFaceToEars(noseX, leftEarX, rightEarX);
 }
 
 async function setupVideo() {
