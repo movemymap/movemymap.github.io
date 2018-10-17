@@ -3,6 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Move My Map</title>
+    <style>
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        #pano, #floating-panel {
+          float: left;
+          height: 100%;
+          width: 45%;
+        }
+      </style>
+
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
     <script src="https://unpkg.com/@tensorflow-models/posenet"></script>
     <script src="./js/index.js"></script>
@@ -10,5 +23,34 @@
 </head>
 <body onload="start()">
 <video id="video" width="600" height="600">Video stream not available.</video>
+
+<button type="button" id="moveLeft">Left</button>
+    <button type="button" id="moveRight">Right</button>
+    <button type="button" id="moveUp">Up</button>
+    <button type="button" id="moveDown">Down</button>
+    <!-- <div id="map"></div> -->
+    <div id="pano"></div>
+    <div id="floating-panel">
+        <table>
+          <tr>
+            <td><b>Position</b></td><td id="position-cell">&nbsp;</td>
+          </tr>
+          <tr>
+            <td><b>POV Heading</b></td><td id="heading-cell">270</td>
+          </tr>
+          <tr>
+            <td><b>POV Pitch</b></td><td id="pitch-cell">0.0</td>
+          </tr>
+          <tr>
+            <td><b>Pano ID</b></td><td id="pano-cell">&nbsp;</td>
+          </tr>
+          <table id="links_table"></table>
+        </table>
+    </div>
+    <script src="./js/main.js"></script>
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdlcNa-GD4i4s1QVyXQsKd4Y_5RkE-9LQ&callback=initialize_map">
+    </script>
 </body>
 </html>
