@@ -19,6 +19,7 @@
     <script src="https://unpkg.com/@tensorflow/tfjs"></script>
     <script src="https://unpkg.com/@tensorflow-models/posenet"></script>
     <script src="./js/index.js"></script>
+    <script src="./js/env.js"></script>
 
 </head>
 <body onload="start()">
@@ -28,6 +29,8 @@
     <button type="button" id="moveRight">Right</button>
     <button type="button" id="moveUp">Up</button>
     <button type="button" id="moveDown">Down</button>
+    <button type="button" id="moveForward">Forward</button>
+    <button type="button" id="moveBackward">Backward</button>
     <!-- <div id="map"></div> -->
     <div id="pano"></div>
     <div id="floating-panel">
@@ -49,8 +52,17 @@
     </div>
     <script src="./js/main.js"></script>
 
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=MYAPIKEY&callback=initialize_map">
-    </script>
+    <script>
+        (function() {
+            var apiKey = env.GOOGLE_API_KEY
+            var googleMap = document.createElement('script');
+            googleMap.type = 'text/javascript';
+            googleMap.async = true;
+            googleMap.defer = true;
+            googleMap.src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&callback=initialize_map';
+            console.log(googleMap.src);
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(googleMap, s);
+        })()
+      </script>
 </body>
 </html>

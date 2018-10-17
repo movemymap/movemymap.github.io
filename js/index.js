@@ -111,6 +111,8 @@ function initPano(fenway, heading_value) {
     document.getElementById("moveLeft").addEventListener("click", move_left);
     document.getElementById("moveUp").addEventListener("click", move_up);
     document.getElementById("moveDown").addEventListener("click", move_down);
+    document.getElementById("moveForward").addEventListener("click", move_forward);
+    document.getElementById("moveBackward").addEventListener("click", move_backward);
     function move_right() {
         var pov = panorama.getPov();
         pov.heading += 10;
@@ -134,4 +136,13 @@ function initPano(fenway, heading_value) {
         pov.pitch -= 10;
         panorama.setPov(pov);
     }
+
+    function move_forward() {
+        panorama.setPano(panorama.getLinks()[0].pano);
+    }
+
+    function move_backward() {
+        panorama.setPano(panorama.getLinks()[1].pano);
+    }
+
 }
