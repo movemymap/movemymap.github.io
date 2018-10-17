@@ -1,6 +1,20 @@
+/************** Evaluate pose ****************/
 
+// Evaluate nose to each ear distances to detect turning of face
+function evaluateFaceToEars(noseX, leftEarX, rightEarX){
+    NoseToLeftEar = Math.abs(noseX - leftEarX);
+    NoseToRightEar = Math.abs(noseX - rightEarX);
 
+    if (NoseToLeftEar > NoseToRightEar + 100) {
+        console.log('left turn');
+    } else if (NoseToRightEar > NoseToLeftEar + 100) {
+        console.log('right turn');
+    } else {
+        console.log('do not move');
+    }
+}
 
+/************** Web browser web came pose capture ****************/
 
 async function start() {
     const videoElement = document.getElementById('video');
@@ -16,8 +30,13 @@ async function start() {
     const model = await posenet.load();
     const pose = await model.estimateSinglePose(videoElement, imageScaleFactor, flipHorizontal, outputStride);
 
-    console.log(pose)
-    // console.log('nose', pose.keypoints[0].position)
+    // Call function to evaluate snapshot for face turns
+    // If nose to left or right ear distances differ by more than 200 pixels, turn
+    noseX = pose.keypoints[0].position.x;
+    leftEarX = pose.keypoints[3].position.x;
+    rightEarX = pose.keypoints[4].position.x;
+    evaluateFaceToEars(noseX, leftEarX, rightEarX);
+
 }
 
 
@@ -135,3 +154,4 @@ function initPano(fenway, heading_value) {
         panorama.setPov(pov);
     }
 }
+
