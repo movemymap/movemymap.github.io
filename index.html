@@ -1,56 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Move My Map</title>
-    <style>
-        html, body {
-          height: 100%;
-          margin: 0;
-          padding: 0;
-        }
-        #pano, #floating-panel {
-          float: left;
-          height: 100%;
-          width: 45%;
-        }
-      </style>
+  <head>
+      <meta charset="UTF-8">
+      <title>Move My Map</title>
+      <style>
+          html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+          }
+          #pano, #floating-panel {
+            float: left;
+            height: 100%;
+            width: 45%;
+          }
+        </style>
 
-    <script src="https://unpkg.com/@tensorflow/tfjs"></script>
-    <script src="https://unpkg.com/@tensorflow-models/posenet"></script>
-    <script src="./js/index.js"></script>
+      <script src="https://unpkg.com/@tensorflow/tfjs"></script>
+      <script src="https://unpkg.com/@tensorflow-models/posenet"></script>
+      <script src="./js/index.js"></script>
+      <script src="./js/env.js"></script>
+  </head>
+  <body onload="start()">
+  <video id="video" width="600" height="600">Video stream not available.</video>
 
-</head>
-<body onload="start()">
-<video id="video" width="600" height="600">Video stream not available.</video>
+  <button type="button" id="moveLeft">Left</button>
+      <button type="button" id="moveRight">Right</button>
+      <button type="button" id="moveUp">Up</button>
+      <button type="button" id="moveDown">Down</button>
+      <!-- <div id="map"></div> -->
+      <div id="pano"></div>
+      <div id="floating-panel">
+          <table>
+            <tr>
+              <td><b>Position</b></td><td id="position-cell">&nbsp;</td>
+            </tr>
+            <tr>
+              <td><b>POV Heading</b></td><td id="heading-cell">270</td>
+            </tr>
+            <tr>
+              <td><b>POV Pitch</b></td><td id="pitch-cell">0.0</td>
+            </tr>
+            <tr>
+              <td><b>Pano ID</b></td><td id="pano-cell">&nbsp;</td>
+            </tr>
+            <table id="links_table"></table>
+          </table>
+      </div>
 
-<button type="button" id="moveLeft">Left</button>
-    <button type="button" id="moveRight">Right</button>
-    <button type="button" id="moveUp">Up</button>
-    <button type="button" id="moveDown">Down</button>
-    <!-- <div id="map"></div> -->
-    <div id="pano"></div>
-    <div id="floating-panel">
-        <table>
-          <tr>
-            <td><b>Position</b></td><td id="position-cell">&nbsp;</td>
-          </tr>
-          <tr>
-            <td><b>POV Heading</b></td><td id="heading-cell">270</td>
-          </tr>
-          <tr>
-            <td><b>POV Pitch</b></td><td id="pitch-cell">0.0</td>
-          </tr>
-          <tr>
-            <td><b>Pano ID</b></td><td id="pano-cell">&nbsp;</td>
-          </tr>
-          <table id="links_table"></table>
-        </table>
-    </div>
-    <script src="./js/main.js"></script>
-
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=MYAPIKEY&callback=initialize_map">
-    </script>
-</body>
+      <script>
+        (function() {
+            var apiKey = env.GOOGLE_API_KEY
+            var googleMap = document.createElement('script');
+            googleMap.type = 'text/javascript';
+            googleMap.async = true;
+            googleMap.defer = true;
+            googleMap.src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&callback=initialize_map';
+            console.log(googleMap.src);
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(googleMap, s);
+        })()
+      </script>
+  </body>
 </html>
