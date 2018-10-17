@@ -26,13 +26,13 @@ function move_left() {
 
 function move_up() {
     var pov = panorama.getPov();
-    pov.pitch += 10;
+    pov.pitch += 5;
     panorama.setPov(pov);
 }
 
 function move_down() {
     var pov = panorama.getPov();
-    pov.pitch -= 10;
+    pov.pitch -= 5;
     panorama.setPov(pov);
 }
 
@@ -47,16 +47,16 @@ function move_backward() {
 
 /************** Evaluate pose ****************/
 
-var prev_nose = null;
+// Doesn't appear to be very reliable for control
 // Evaluate nose to each ear distances to detect turning of face
 function evaluateFaceToEars(noseX, leftEarX, rightEarX){
     NoseToLeftEar = Math.abs(noseX - leftEarX);
     NoseToRightEar = Math.abs(noseX - rightEarX);
 
-    if (NoseToLeftEar > NoseToRightEar + 100) {
+    if (NoseToLeftEar + 100 > NoseToRightEar) {
         console.log('left turn');
         move_left();
-    } else if (NoseToRightEar > NoseToLeftEar + 100) {
+    } else if (NoseToRightEar +100 > NoseToLeftEar) {
         console.log('right turn');
         move_right();
     } else {
@@ -64,20 +64,30 @@ function evaluateFaceToEars(noseX, leftEarX, rightEarX){
     }
 }
 
-function eval_nose (prev_pos, curr_pos){
-    if (Math.abs (curr_pos - prev_pos) < 10 | prev_pos === null) {
-        console.log("No move");
-        curr_state = "NO_MOVE";
-    }
-    else if (prev_pos < curr_pos) {
+var prev_nose_x = null;
+var prev_nose_y = null;
+function eval_nose (prev_pos_x, curr_pos_x, prev_pos_y, curr_pos_y){
+    if (prev_pos_x < curr_pos_x - 10) {
         console.log("Right");
         move_right();
     }
-    else {
+    else if (prev_pos_x > curr_pos_x + 10) {
         console.log("Left");
         move_left();
     }
-    prev_state = curr_state;
+    else if (prev_pos_y > curr_pos_y + 10) {
+        console.log("Up");
+        move_up();
+    }
+    else if (prev_pos_y < curr_pos_y - 10) {
+        console.log("Down");
+        move_down();
+    }
+    else if ( prev_pos_x === null | prev_pos_y === null ) {
+        console.log("No move");
+        curr_state = "NO_MOVE";
+    }
+    //prev_state = curr_state;
 
 }
 
@@ -106,13 +116,15 @@ async function start() {
         
         // Call function to evaluate snapshot for face turns
         // Turn if nose to left or right ear distances differ by more than 100 pixels
-        current_nose = pose.keypoints[0].position.x;
+        current_nose_x = pose.keypoints[0].position.x;
+        current_nose_y = pose.keypoints[0].position.y;
         noseX = pose.keypoints[0].position.x;
         leftEarX = pose.keypoints[3].position.x;
         rightEarX = pose.keypoints[4].position.x;
-        // evaluateFaceToEars(noseX, leftEarX, rightEarX);
-        eval_nose(prev_nose, current_nose);
-        prev_nose = current_nose;
+        //evaluateFaceToEars(noseX, leftEarX, rightEarX);
+        eval_nose(prev_nose_x, current_nose_x, prev_nose_y, current_nose_y);
+        prev_nose_x = current_nose_x;
+        prev_nose_y = current_nose_y;
     }, 10);
 }
 
