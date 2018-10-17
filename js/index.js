@@ -1,9 +1,12 @@
 var panorama;
+var google_hq = {lat: 51.5331936, lng: -0.1254369};
+var times_sq = {lat: 40.7592172, lng: -73.9846581};
 
 function initPano() {
     panorama = new google.maps.StreetViewPanorama(
         document.getElementById('pano'), {
-            position: {lat: 51.5246866, lng: -0.1353883},
+            position: google_hq,
+            // position: times_sq,
             pov: {
             heading: 270,
             pitch: 0
